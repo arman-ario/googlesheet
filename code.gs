@@ -72,19 +72,20 @@ function initializeSheet() {
   sheet.clear();
   
   const headers = [
-    "ID",
-    "دسته‌بندی",
-    "نام محصول",
-    "قیمت نقدی",
-    "قیمت چکی",
-    "قیمت با اسنپ‌پی",
-    "قیمت مصرف‌کننده",
-    "تصویر",
-    "رنگ‌های موجود",
-    "برند",
-    "وضعیت موجودی",
-    "نوع"
-  ];
+  "ID",
+  "دسته‌بندی",
+  "نام محصول",
+  "قیمت نقدی",
+  "قیمت چکی",
+  "قیمت با اسنپ‌پی",
+  "قیمت مصرف‌کننده",
+  "موجودی",          // این خط جدید است
+  "تصویر",
+  "رنگ‌های موجود",
+  "برند",
+  "وضعیت موجودی",
+  "نوع"
+];
   
   const headerRange = sheet.getRange(1, 1, 1, headers.length);
   headerRange.setValues([headers]);
@@ -233,19 +234,20 @@ function writeProductsToSheet(products) {
       const consumerPrice = Math.round(checkPrice * 1.3);
 
       allProductsData.push([
-        product.id,
-        (product.categories || []).map(cat => cat.name).join(', '),
-        product.name,
-        cashPrice,
-        checkPrice,
-        snappayPrice,
-        consumerPrice,
-        product.images.length ? `=IMAGE("${product.images[0].src}")` : '',
-        getProductColors(product),
-        getProductBrand(product),
-        product.stock_status,
-        product.type
-      ]);
+  product.id,
+  (product.categories || []).map(cat => cat.name).join(', '),
+  product.name,
+  cashPrice,
+  checkPrice,
+  snappayPrice,
+  consumerPrice,
+  product.stock_quantity || 0,     // این خط جدید است
+  product.images.length ? `=IMAGE("${product.images[0].src}")` : '',
+  getProductColors(product),
+  getProductBrand(product),
+  product.stock_status,
+  product.type
+]);
 
       if (product.type === 'variable' && product.variations && product.variations.length > 0) {
         try {
@@ -276,19 +278,20 @@ function writeProductsToSheet(products) {
                   .join(' - ');
                 
                 allProductsData.push([
-                  variation.id,
-                  (product.categories || []).map(cat => cat.name).join(', '),
-                  `${product.name} (${variationAttributes})`,
-                  varCashPrice,
-                  varCheckPrice,
-                  varSnappayPrice,
-                  varConsumerPrice,
-                  product.images.length ? `=IMAGE("${product.images[0].src}")` : '',
-                  variationAttributes,
-                  getProductBrand(product),
-                  variation.stock_status,
-                  'variation'
-                ]);
+  variation.id,
+  (product.categories || []).map(cat => cat.name).join(', '),
+  `${product.name} (${variationAttributes})`,
+  varCashPrice,
+  varCheckPrice,
+  varSnappayPrice,
+  varConsumerPrice,
+  variation.stock_quantity || 0,    // این خط جدید است
+  product.images.length ? `=IMAGE("${product.images[0].src}")` : '',
+  variationAttributes,
+  getProductBrand(product),
+  variation.stock_status,
+  'variation'
+]);
               }
             });
           }
