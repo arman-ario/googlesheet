@@ -514,7 +514,8 @@ function setupPrintView() {
   try {
     const totalColumns = sheet.getMaxColumns();
     for (let i = 1; i <= totalColumns; i++) {
-      if (![3,4,5,6,8].includes(i)) {
+      // فقط ستون‌های 3 (نام), 4 (قیمت نقدی), 5 (قیمت چکی), 6 (قیمت اسنپ‌پی) و 9 (عکس) نمایش داده شوند
+      if (![3,4,5,6,9].includes(i)) {
         sheet.hideColumn(sheet.getRange(1, i, 1, 1));
       }
     }
@@ -523,7 +524,7 @@ function setupPrintView() {
     sheet.setColumnWidth(4, 120);
     sheet.setColumnWidth(5, 120);
     sheet.setColumnWidth(6, 120);
-    sheet.setColumnWidth(8, 150);
+    sheet.setColumnWidth(9, 150); // تنظیم عرض ستون عکس
 
     sheet.setFrozenRows(1);
     sheet.setPageView();
