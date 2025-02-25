@@ -405,11 +405,13 @@ function removeVariableProductHeaders() {
       return;
     }
 
+    // خواندن تمام داده‌ها
     const data = sheet.getRange(1, 1, lastRow, lastColumn).getValues();
-    const typeColumnIndex = 11;
+    const typeColumnIndex = 12; // ستون نوع محصول (M)
     let rowsToDelete = [];
     let previousWasVariable = false;
 
+    // پیدا کردن ردیف‌های هدر محصولات متغیر
     for (let i = 1; i < data.length; i++) {
       const currentType = data[i][typeColumnIndex];
       
@@ -421,17 +423,19 @@ function removeVariableProductHeaders() {
       }
     }
 
+    // حذف ردیف‌ها از آخر به اول
     if (rowsToDelete.length > 0) {
       for (let i = rowsToDelete.length - 1; i >= 0; i--) {
         sheet.deleteRow(rowsToDelete[i]);
       }
 
+      // به‌روزرسانی اطلاعات
       sheet.getRange(1, lastColumn + 1).setValue('Last Update:')
            .setFontFamily('B Nazanin')
            .setFontWeight('bold')
            .setHorizontalAlignment('center');
       
-      sheet.getRange(1, lastColumn + 2).setValue('2025-02-15 14:33:35')
+      sheet.getRange(1, lastColumn + 2).setValue('2025-02-25 09:55:10')
            .setFontFamily('B Nazanin')
            .setHorizontalAlignment('center');
 
@@ -440,7 +444,7 @@ function removeVariableProductHeaders() {
            .setFontWeight('bold')
            .setHorizontalAlignment('center');
       
-      sheet.getRange(1, lastColumn + 4).setValue('s-arman-m-j')
+      sheet.getRange(1, lastColumn + 4).setValue('arman-ario')
            .setFontFamily('B Nazanin')
            .setHorizontalAlignment('center');
 
@@ -456,6 +460,7 @@ function removeVariableProductHeaders() {
         ui.ButtonSet.OK
       );
     }
+
   } catch (error) {
     Logger.log('Error in removeVariableProductHeaders: ' + error.toString());
     ui.alert(
@@ -463,6 +468,13 @@ function removeVariableProductHeaders() {
       'خطایی در حذف هدر محصولات متغیر رخ داد. لطفاً دوباره تلاش کنید.',
       ui.ButtonSet.OK
     );
+
+    // ارسال ایمیل خطا
+    MailApp.sendEmail({
+      to: "arman-m-j@gmail.com",
+      subject: "خطا در حذف هدر محصولات متغیر",
+      body: `خطای زیر در هنگام حذف هدر محصولات متغیر رخ داد:\n\nزمان خطا: 2025-02-25 09:55:10\nکاربر: arman-ario\nخطا: ${error.toString()}\n\nلطفاً بررسی کنید و در صورت نیاز عملیات را به صورت دستی انجام دهید.`
+    });
   }
 }
 
